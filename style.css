@@ -8,7 +8,6 @@ main {
   width: 1152px;
 }
 
-
 .board {
   display: flex;
   flex-flow: column nowrap;
@@ -45,17 +44,16 @@ main {
   border: 1px solid silver;
   border-radius: 4px;
   justify-content: space-around;
-
 }
 
 .item .fa {
   color:silver;
 }
-.add {
+.plus {
   font-size: 72px;
 }
 
-.button {
+.add {
   margin-bottom:30px;
   padding-right: 22px;
   position: relative;
@@ -86,4 +84,27 @@ main {
   color:white;
   line-height:42px;
   font-size: 14px;
+}
+
+.x {
+  color: silver;
+  background-image: url("./icons/x.svg");
+  height: 42px;
+  width: 42px;
+  background-repeat: no-repeat;
+}
+
+.drag {
+  background-image: url(./icons/drag.svg);
+  background-repeat: no-repeat;
+  height:42px;
+  width:42px;
+}
+
+.itemText {
+  border:none;
+  font-family:Roboto,sans-serif;
+  font-size:16px;
+  margin: auto;
+  width:70%;
 }
