@@ -51,7 +51,9 @@ let item;
 const dragOver  = (e) => { e.preventDefault(); }
 const dragLeave = (e) => { item.classList.remove('hover');  e.target.classList.remove('hover'); }
 const dragEnter = (e) => { e.preventDefault();  item.classList.add('hover'); }
-const dragStart = (e) => {   item = e.target; item.classList.add('hover')} 
+const dragStart = (e) => { item = e.target; item.classList.add('hover')} 
+const dragEnd   = (e) => { item.classList.remove('hover')} 
+
 const dragDrop  = (e) => {
   e.preventDefault();
   item.classList.remove('hover'); 
@@ -71,7 +73,7 @@ const dragDrop  = (e) => {
 
 document.querySelectorAll('.items').forEach(x => {
   x.addEventListener('dragstart', dragStart);
-  x.addEventListener('dragend'  , dragStart);
+  x.addEventListener('dragend'  , dragEnd);
 })
 
 document.querySelectorAll('.items').forEach(x => {
