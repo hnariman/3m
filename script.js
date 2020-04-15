@@ -1,79 +1,98 @@
-const item = document.querySelectorAll('.item');
-const move = document.querySelectorAll('.drag');
-const del  = document.querySelectorAll('.x');
-const add  = document.querySelector('.add');
-const sort = document.querySelector('.sort');
-
-
-
-// const handler = (e) => {
-//   console.log(e.target);
-// }
-
-
-// document.querySelector('main').addEventListener('click', handler);
-
-
-
-let values = [];
-
-const deleteItem = () => { // remove item button
-  removeListeners();
-  console.log('delete item');
-  console.log(event.target.parentElement);
-  console.log(this);
-  event.target.parentElement.parentElement.removeChild(event.target.parentNode);
-  addListeners();
+// компактный создватель элементов HTML ( уже с классом )
+const createHTMLElement = (tag, clas, type=null, value=null) => {
+  const element = document.createElement(`${tag}`);
+  element.classList.add(`${clas}`);
+  if( type  !== null ) { element.type  = `${type}`  }
+  if( value !== null ) { element.value = `${value}` }
+  return element;
 }
 
-const moveItem = ()  => { // drag & drop item button
-  console.log('moving item');
-  console.log(event.target.parentElement);
-  event.target.parentElement.parentElement.addEventListener('mousemove', () => {
-    event.target.parentElement.parentElement.addEventListener('mouseup', () => {
-      event.target.parentElement.parentElement.removeEventListener()
-    })
-    console.log('moving mouse');
-  })
-  console.log('mousedown event');
-  console.log(event.target.parentElement.querySelector('p').innerText);
+// Подключить драг HTML:5 по селектору, чтобы сделать this драгоспособным 
+const makeDraggableAll = (selector) => {
+  const items = document.querySelectorAll(`${selector}`);
+  items.forEach(x => { 
+    if (!x.getAttribute('draggable')) x.setAttribute('draggable', 'true')})
+}
+makeDraggableAll('.item');
+
+// Добавляем новые слот и элемент 
+const add = () => {
+  const list = document.querySelector('ul');
+  const item = createHTMLElement('li','item');
+  const drag = createHTMLElement('i', 'drag');
+  const input = createHTMLElement('input','itemText','text');
+  const x = createHTMLElement('i','x');
+  item.append(drag, input, x);
+  list.append(item);
+  makeDraggableAll('.item');
 }
 
-const addItem = () => { // adding item button
-  removeListeners();
-  saveValues(item);
-  console.log('adding item');
-  console.log(event.target.parentElement.innerHTML);
-  document.querySelector('.items').innerHTML += `
-           <li class="item"> <i class="drag"></i> 
-             <input class="itemText" id="" type="text" name="">
-             <i class="x"></i></li> `
-  addListeners();
+// зона Харакири 
+const del = (e) => { e.target.parentNode.remove(e.target); }
+
+// сортировка букв и слов
+const sort = (e) => {
+  const icon = document.querySelector('.sort');
+  const list = document.querySelectorAll('.item');
+  icon.style.color = 'black';
+  icon.classList.toggle('fa-sort-amount-asc');
+  icon.classList.toggle('fa-sort-amount-desc');
+  const inputs = document.querySelectorAll('input');
+  values = Array.from(inputs).map( x => x.value ).filter(x => x.length > 0 );
+  // values = values.sort((a,b)=> a-b);
+  if (icon.classList.contains('fa-sort-amount-asc' )){ values.sort();    }
+  if (icon.classList.contains('fa-sort-amount-desc')){ values.reverse(); }
+  // inputs.forEach(( elem, index ) => { elem.value = values[index]; })
+  inputs.forEach(( elem, index ) => { if ( values[index] !== undefined) elem.value = values[index]; })
+  setTimeout(() => { icon.style.color = 'grey'; },500);
 }
 
-const sortItem = () => { // sort list items
-  console.log('sorting items');
+// двигатель и переносчик!
+let item;
+const dragOver  = (e) => { e.preventDefault(); }
+const dragLeave = (e) => { e.target.classList.remove('hover'); }
+const dragEnter = (e) => { e.preventDefault(); }
+// const dragEnter = (e) => { e.preventDefault(); e.target.classList.add('hover'); }
+// const dragStart = (e) => { e.target.classList.add('hover');  item = e.target; } 
+const dragStart = (e) => {   item = e.target; } 
+const dragDrop  = (e) => {
+  e.preventDefault();
+  console.log(e.target.tagName);
+  if ( e.target.tagName === 'LI' ) { e.target.parentElement.append(item) }; 
+  if ( e.target.tagName !== 'LI' ) { return false; };
+  e.target.classList.remove('hover'); 
+  item.classList.remove('hover'); 
+  const itemTop = item.getBoundingClientRect().top;
+  const targetTop = e.target.getBoundingClientRect().top;
+  itemTop < targetTop 
+    ? e.target.parentElement.insertBefore(item, e.target)
+    : e.target.parentElement.insertBefore(item, e.target.nextSibling);
 }
 
-const saveValues = (elem) => {
-  values = Array.from(elem);
-  values = values.map(v => v.innerText);
-  console.log(values);
+document.querySelectorAll('.items').forEach(x => {
+  x.addEventListener('dragstart', dragStart);
+  x.addEventListener('dragend'  , dragStart);
+})
+
+document.querySelectorAll('.items').forEach(x => {
+  x.addEventListener('dragover'  ,  dragOver );
+  x.addEventListener('drop'      ,  dragDrop );
+  x.addEventListener('dragleave' , dragLeave );
+  x.addEventListener('dragenter' , dragEnter );
+})
+
+// распределитель импульсов грызуна - ( mouse event handler )
+const handler = (e) => {
+  if (e.target.parentNode.className === 'add' && e.type === 'click'){ add();  } 
+  else if ( e.type === 'click' && e.target.classList.contains('x')) { del(e); } 
+  else if ( e.type === 'click' && e.target.classList.contains('sort')){ sort(e);}
 }
 
-const addListeners = () => {
-  move.forEach((x) => { x.addEventListener('mousedown', moveItem, false) });
-  del.forEach((x)  => { x.addEventListener('click', deleteItem, false)  });
-  add.addEventListener('click', addItem, false);  
-  sort.addEventListener('click', sortItem, false);
-}
-
-const removeListeners = () => {
-  move.forEach((x) => { x.removeEventListener('mousedown', moveItem, false) });
-  del.forEach((x)  => { x.removeEventListener('click', deleteItem, false)  });
-  add.removeEventListener('click', addItem, false);  
-  sort.removeEventListener('click', sortItem, false);
-}
-
-
-addListeners();
+document.addEventListener('click', handler, true);
+document.querySelectorAll('x', 'drag', 'itemText').forEach( x =>  {
+  x.removeEventListener('drag')
+  x.removeEventListener('dragover');
+  x.removeEventListener('drop'    );
+  x.removeEventListener('dragleave' );
+  x.removeEventListener('dragenter' );
+});
