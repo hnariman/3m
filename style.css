@@ -11,11 +11,13 @@ main {
 .board {
   display: flex;
   flex-flow: column nowrap;
+  align-items:center;
   width: 30%;
   margin:  auto;
   border: 1px solid black;
   border-radius: 10px;
   overflow: hidden;
+  padding-bottom:20px;
 }
 
 .topbar {
@@ -47,6 +49,8 @@ main {
 
 
 .item {
+  z-index:3;
+  padding: 4px;
   background:white;
   margin: 0 auto;
   height: 40px;
@@ -67,6 +71,8 @@ main {
 }
 
 .add {
+  text-align:center;
+  vertical-align:middle;
   margin-bottom:30px;
   padding-right: 22px;
   position: relative;
@@ -74,11 +80,12 @@ main {
   border-radius: 35px; 
   width: 130px;
   height: 42px;
-  left: 20vmin;
+  margin: 0 auto;
 }
 
 .plus {
-  padding: auto;
+  align-self:center;
+  vertical-align:middle;
   display:flex;
   align-items:center;
   text-align:center;
@@ -93,6 +100,11 @@ main {
   color: white;
 }
 
+.plus-sign {
+margin: auto;
+
+}
+
 .buttonBase {
   text-align: right;
   color:white;
@@ -103,8 +115,8 @@ main {
 .x {
   color: silver;
   background-image: url("./icons/x.svg");
-  height: 42px;
-  width: 42px;
+  height: 36px;
+  width: 36px;
   background-repeat: no-repeat;
 }
 
@@ -128,5 +140,6 @@ main {
 }
 
 .hover {
-  background:yellow;
+  background-color: #FFDC40;
 }
+

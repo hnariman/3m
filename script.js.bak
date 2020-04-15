@@ -42,6 +42,7 @@ const sort = (e) => {
   // values = values.sort((a,b)=> a-b);
   if (icon.classList.contains('fa-sort-amount-asc' )){ values.sort();    }
   if (icon.classList.contains('fa-sort-amount-desc')){ values.reverse(); }
+  // inputs.forEach(( elem, index ) => { elem.value = values[index]; })
   inputs.forEach(( elem, index ) => { if ( values[index] !== undefined) elem.value = values[index]; })
   setTimeout(() => { icon.style.color = 'grey'; },500);
 }
@@ -49,24 +50,33 @@ const sort = (e) => {
 // двигатель и переносчик!
 let item;
 const dragOver  = (e) => { e.preventDefault(); }
-const dragLeave = (e) => { item.classList.remove('hover');  e.target.classList.remove('hover'); }
-const dragEnter = (e) => { e.preventDefault();  item.classList.add('hover'); }
-const dragStart = (e) => {   item = e.target; item.classList.add('hover')} 
+const dragLeave = (e) => { e.target.classList.remove('hover'); }
+const dragEnter = (e) => { e.preventDefault(); }
+// const dragEnter = (e) => { e.preventDefault(); e.target.classList.add('hover'); }
+// const dragStart = (e) => { e.target.classList.add('hover');  item = e.target; } 
+const dragStart = (e) => {   item = e.target; } 
 const dragDrop  = (e) => {
   e.preventDefault();
-  item.classList.remove('hover'); 
-  e.target.classList.remove('hover'); 
-  const itemTop = item.getBoundingClientRect().bottom;
-  const targetTop = e.target.getBoundingClientRect().bottom;
+  const itemTop = item.getBoundingClientRect().top;
+  const targetTop = e.target.getBoundingClientRect().top;
   console.log(e.target.tagName);
   if ( e.target.tagName === 'LI' ) { e.target.parentElement.append(item) } 
   if ( e.target.tagName !== 'LI' ) { return false; };
-  item.classList.remove('hover'); 
   e.target.classList.remove('hover'); 
+  item.classList.remove('hover'); 
+  // const targetIndex = document.querySelectorAll('li').forEach( (x, index) => {
+  // if (  x === e.target ) index
+  // } )
+  // console.log(targetIndex);
+  // const targetIndex = forEach( (x, index) => {
+      
+  // })
   if ( itemTop < targetTop )  { e.target.parentElement.insertBefore(item, e.target) }
-  else if( itemTop > targetTop )  {  e.target.parentElement.insertBefore(item, e.target.previousSibling) }
-  else if( itemTop > e.target.parentElement.firstChild.getBoundingClientRect().bottom )
-  { e.target.parentElement.insertBefore(item, e.target.parentElement.firstChild) }
+  else if( itemTop > targetTop )  {  e.target.parentElement.insertBefore(item, e.target.nextSibling) }
+  else if( itemTop > e.target.parentElement.firstChild.getBoundingClientRect.top )  {  e.target.parentElement.insertBefore(item, e.target.parentElement.firstChild) }
+  // if( itemTop > target.parentElement.firstChild.getBoundingClientRect().top) {
+  //    e.target.parentElement.insertBefore(item, e.target.firstChild);
+  // }
 }
 
 document.querySelectorAll('.items').forEach(x => {
