@@ -49,13 +49,14 @@ const sort = (e) => {
 // двигатель и переносчик!
 let item;
 const dragOver  = (e) => { e.preventDefault(); }
-const dragLeave = (e) => { item.classList.remove('hover');  e.target.classList.remove('hover'); }
-const dragEnter = (e) => { e.preventDefault();  item.classList.add('hover'); }
+const dragLeave = (e) => { e.preventDefault(); item.classList.remove('hover'); e.target.classList.remove('hover'); }
+const dragEnter = (e) => { e.preventDefault(); item.classList.add('hover'); }
 const dragStart = (e) => { item = e.target; item.classList.add('hover')} 
-const dragEnd   = (e) => { item.classList.remove('hover')} 
+const dragEnd   = (e) => { e.preventDefault(); item.classList.remove('hover')} 
 
 const dragDrop  = (e) => {
-  e.preventDefault();
+  e.preventDefault(); 
+  e.stopPropagation();
   item.classList.remove('hover'); 
   e.target.classList.remove('hover'); 
   const itemTop = item.getBoundingClientRect().bottom;
@@ -91,10 +92,11 @@ const handler = (e) => {
 }
 
 document.addEventListener('click', handler, true);
-document.querySelectorAll('x', 'drag', 'itemText').forEach( x =>  {
-  x.removeEventListener('drag')
-  x.removeEventListener('dragover');
-  x.removeEventListener('drop'    );
-  x.removeEventListener('dragleave' );
-  x.removeEventListener('dragenter' );
+document.querySelectorAll('.x', '.drag', 'input').forEach( x =>  {
+  x.removeEventListener('dragover'  ,  dragOver, false );
+  x.removeEventListener('drop'      ,  dragDrop, false );
+  x.removeEventListener('dragleave' , dragLeave, false );
+  x.removeEventListener('dragenter' , dragEnter, false );
+  x.removeEventListener('dragend'   ,   dragEnd, false );
+  x.removeEventListener('dragstart' , dragStart, false );
 });
