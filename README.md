@@ -4,4 +4,3 @@ Simple ToDo List application made in Vanilla JS.
 - Add & Remove items
 
 ![Screen Shot](https://github.com/hnariman/todo_list/blob/master/todolist.png)
-https://github.com/hnariman/todo_list/blob/master/todolist.png
