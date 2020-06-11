@@ -3,4 +3,5 @@ Simple ToDo List application made in Vanilla JS.
 - Sorting & reverse sorting of todo items by alphabet (asc and desc)
 - Add & Remove items
 
-![Screen Shot](https://octodex.github.com/images/yaktocat.png)
+![Screen Shot](https://github.com/hnariman/todo_list/blob/master/todolist.png)
+https://github.com/hnariman/todo_list/blob/master/todolist.png
